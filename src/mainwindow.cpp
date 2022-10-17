@@ -79,12 +79,14 @@ void MainWindow::on_normal_termiate_btn_clicked()
 
 void MainWindow::on_start_record_btn_clicked()
 {
-    std::cout<< "start record clicked" << std::endl;
+    bool zt;
+    c_inter->callStartRecord(zt);
 }
 
 void MainWindow::on_end_record_btn_clicked()
 {
-    std::cout<< "end record clicked" << std::endl;
+    bool zt;
+    c_inter->callEndRecord(zt);
 }
 
 void MainWindow::on_move_to1_btn_clicked()

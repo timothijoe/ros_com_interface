@@ -11,7 +11,7 @@ set(CMAKE_AUTOUIC ON)
 ##############################################################################
 
 # qt_build provides the qt cmake glue, roscpp the comms for a default talker
-find_package(catkin REQUIRED COMPONENTS qt_build roscpp) 
+find_package(catkin REQUIRED COMPONENTS qt_build roscpp actionlib_msgs actionlib)
 
 include_directories(${catkin_INCLUDE_DIRS})
 # Use this to define what the package will export (e.g. libs, headers).
