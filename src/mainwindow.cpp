@@ -65,19 +65,22 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_start_track_btn_clicked()
 {
   std::cout<< "start button clicked" << std::endl;
+  MainWindow::on_start_record_btn_clicked();
   int num = state_traj_num;
   c_inter->callTrackAction(num);
-
 }
 
 void MainWindow::on_interrupt_btn_clicked()
 {
   std::cout<< "interrupt button clicked" << std::endl;
+  c_inter->cancelTrackAction();
+  MainWindow::on_end_record_btn_clicked();
 }
 
 void MainWindow::on_normal_termiate_btn_clicked()
 {
   std::cout<< "normal terminate clicked" << std::endl;
+  MainWindow::on_end_record_btn_clicked();
 }
 
 void MainWindow::on_start_record_btn_clicked()

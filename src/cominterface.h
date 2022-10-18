@@ -49,6 +49,7 @@ public:
   bool callStartRecord(bool label);
   bool callEndRecord(bool label);
   bool callTrackAction(int traj_idx);
+  bool cancelTrackAction();
 
 Q_SIGNALS:
   void figureUpdated(double data1, double data2);

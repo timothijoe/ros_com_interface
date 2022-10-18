@@ -154,3 +154,11 @@ std::cout << " end sendgoal" << std::endl;
 //                                boost::bind(&ComInterface::feedback_callback, _1));
 
 }
+
+
+bool ComInterface::cancelTrackAction()
+{
+  ROS_INFO("Cancel Track Action");
+  //bool server_exists = action_client_track->waitForServer(ros::Duration(3.0));
+  action_client_track->cancelGoal();
+}
