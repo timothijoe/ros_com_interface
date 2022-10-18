@@ -47,6 +47,8 @@ private slots:
 
     void on_move_to2_btn_clicked();
 
+    void on_state_space_box_valueChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     ComInterface *c_inter;
@@ -54,6 +56,9 @@ private:
     QTimer* timer;
 //    Manual_Window* manual_window;
     turtlesim::Color colour_input;
+    int space_channel = 0; // 0 for state space and 1 for control space
+    int state_traj_num = 0;
+    int control_traj_num = 0;
 
 
 };

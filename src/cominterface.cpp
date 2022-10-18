@@ -10,12 +10,15 @@
 
 ComInterface::ComInterface()
 {
-
+      action_client_track = new ActionClient_track(n, "/wp_update");
 }
 ComInterface::ComInterface(int argc, char **argv):
     init_argc(argc),
     init_argv(argv)
- {}
+
+{
+      action_client_track = new ActionClient_track(n, "/wp_update");
+}
 ComInterface::~ComInterface()
 {
   if(ros::isStarted()) {
@@ -32,14 +35,18 @@ bool ComInterface::init()
       return false;
     }
     ros::start(); // explicitly needed since our nodehandle is going out of scope.
-    ros::NodeHandle n;
+//    ros::NodeHandle n;
     start_record_client = n.serviceClient<std_srvs::SetBool>("/start_record");
     end_record_client = n.serviceClient<std_srvs::SetBool>("/end_record");
     // &action_client = ActionClient(n, "try_action");
     //ActionClient action_client2(n, "try_action");
-    action_client_track = new ActionClient_track(n, "/wp_update");
+
+
+//    action_client_track = new ActionClient_track(n, "/wp_update");
+
+
 //    auto server_exists = action_client_track->waitForServer(ros::Duration(3.0));
-    action_client_stop = new ActionClient_track(n, "/is_stop");
+//    action_client_stop = new ActionClient_track(n, "/is_stop");
     //  &action_client2;
     //actionlib::SimpleActionClient<styx_msgs::wp_updateAction> ac(n, "chatter", true);
     start();
@@ -142,7 +149,7 @@ std::cout << " end sendgoal" << std::endl;
 
 //  action_client_track->sendGoal(goal, &ComInterface::done_callback);
 
-//  action_client_track->sendGoal(goal, boost::bind(&ComInterface::done_callback, _1, _2, &action_client_track),
+//  action_client_track->sendGoal(goal, boost::bind(&ComInterface::done_callback, _1, _2, action_client_track),
 //                                boost::bind(&ComInterface::active_callback),
 //                                boost::bind(&ComInterface::feedback_callback, _1));
 

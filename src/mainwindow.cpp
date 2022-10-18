@@ -65,7 +65,7 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_start_track_btn_clicked()
 {
   std::cout<< "start button clicked" << std::endl;
-  int num = 0;
+  int num = state_traj_num;
   c_inter->callTrackAction(num);
 
 }
@@ -100,4 +100,10 @@ void MainWindow::on_move_to1_btn_clicked()
 void MainWindow::on_move_to2_btn_clicked()
 {
     std::cout<< "moveto 2 clicked" << std::endl;
+}
+
+void MainWindow::on_state_space_box_valueChanged(const QString &arg1)
+{
+    state_traj_num = ui->state_space_box->value();
+    ui->state_space_lcd->display(state_traj_num);
 }

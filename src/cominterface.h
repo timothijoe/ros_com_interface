@@ -64,6 +64,7 @@ private:
   int failed_times = 0;
   int total_times = 0;
   //ControlPannel *control_pannel;
+  ros::NodeHandle n;
   ros::Publisher chatter_publisher;
   ros::Subscriber data_sub;
   ros::Subscriber eva_sub;
