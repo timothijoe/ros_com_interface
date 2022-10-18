@@ -98,11 +98,13 @@ void MainWindow::on_end_record_btn_clicked()
 void MainWindow::on_move_to1_btn_clicked()
 {
     std::cout<< "moveto 1 clicked" << std::endl;
+    c_inter->moveToOrigion1();
 }
 
 void MainWindow::on_move_to2_btn_clicked()
 {
     std::cout<< "moveto 2 clicked" << std::endl;
+    c_inter->moveToOrigion2();
 }
 
 void MainWindow::on_state_space_box_valueChanged(const QString &arg1)

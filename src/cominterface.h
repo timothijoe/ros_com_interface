@@ -15,10 +15,11 @@
 
 #include <styx_msgs/wp_updateAction.h>
 #include <styx_msgs/wp_updateGoal.h>
-
+#include <move_base_msgs/MoveBaseAction.h>
 //typedef actionlib::SimpleActionServer<actionlib_tutorials::FibonacciAction> ActionServer;
 //typedef actionlib::ActionClient <actionlib_tutorials::FibonacciAction> ActionClient;
 typedef actionlib::SimpleActionClient <styx_msgs::wp_updateAction> ActionClient_track;
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient; 
 //typedef actionlib::ActionClient <styx_msgs::wp_updateGoal> ActionClient_ugoal;
 class ComInterface: public QThread{
   Q_OBJECT
@@ -50,6 +51,8 @@ public:
   bool callEndRecord(bool label);
   bool callTrackAction(int traj_idx);
   bool cancelTrackAction();
+  bool moveToOrigion1();
+  bool moveToOrigion2();
 
 Q_SIGNALS:
   void figureUpdated(double data1, double data2);
@@ -72,6 +75,7 @@ private:
   ros::ServiceClient start_record_client;
   ros::ServiceClient end_record_client;
   ActionClient_track* action_client_track;
+  MoveBaseClient* movebase_client;
   ActionClient_track* action_client_stop;
   uint8_t track_current_idx;
 

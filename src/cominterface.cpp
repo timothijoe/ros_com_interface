@@ -11,6 +11,8 @@
 ComInterface::ComInterface()
 {
       action_client_track = new ActionClient_track(n, "/wp_update");
+      action_client_stop= new ActionClient_track(n, "/is_stop");
+      movebase_client = new MoveBaseClient(n, "/move_base");
 }
 ComInterface::ComInterface(int argc, char **argv):
     init_argc(argc),
@@ -18,6 +20,8 @@ ComInterface::ComInterface(int argc, char **argv):
 
 {
       action_client_track = new ActionClient_track(n, "/wp_update");
+      action_client_stop= new ActionClient_track(n, "/is_stop");
+      movebase_client = new MoveBaseClient(n, "/move_base");
 }
 ComInterface::~ComInterface()
 {
@@ -160,5 +164,72 @@ bool ComInterface::cancelTrackAction()
 {
   ROS_INFO("Cancel Track Action");
   //bool server_exists = action_client_track->waitForServer(ros::Duration(3.0));
-  action_client_track->cancelGoal();
+  // action_client_track->cancelGoal();
+  styx_msgs::wp_updateGoal goal;
+  goal.idx = 15;
+  action_client_stop->sendGoal(goal);
+  return true;
+}
+
+
+bool ComInterface::moveToOrigion1()
+{
+  ROS_INFO("Move to Origin 1");
+  return true;
+
+	geometry_msgs::PoseStamped send_Pose;
+	move_base_msgs::MoveBaseGoal goal;
+	
+	send_Pose.pose.position.x = -0.0029694437980651855;
+	send_Pose.pose.position.y =  2.828028678894043;
+	send_Pose.pose.position.z = 0;
+	send_Pose.pose.orientation.x = 0;
+	send_Pose.pose.orientation.y = 0;
+	send_Pose.pose.orientation.z = -0.6914743661613499;
+	send_Pose.pose.orientation.w = 0.72240099732887923;
+	
+	goal.target_pose = send_Pose;//此处记得要定义MoveBaseGoal类的goal
+	
+	movebase_client->sendGoal(goal);
+	
+	movebase_client->waitForResult();
+	if(movebase_client->getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
+		ROS_INFO("already reached goal!");
+		//TODO: 成功到达目的地，此处发挥想象做点啥
+	}
+	else{
+		ROS_INFO("Failed to reach the goal!");  
+	}  
+  return 0;
+}
+
+bool ComInterface::moveToOrigion2()
+{
+  ROS_INFO("Move to Origin 1");
+  return true;
+
+	geometry_msgs::PoseStamped send_Pose;
+	move_base_msgs::MoveBaseGoal goal;
+	
+	send_Pose.pose.position.x = 0.235748291015625;
+	send_Pose.pose.position.y =  -8.122727394104004;
+	send_Pose.pose.position.z = 0;
+	send_Pose.pose.orientation.x = 0;
+	send_Pose.pose.orientation.y = 0;
+	send_Pose.pose.orientation.z = 0.708872308283172;
+	send_Pose.pose.orientation.w = 0.7053368348167331;
+	
+	goal.target_pose = send_Pose;//此处记得要定义MoveBaseGoal类的goal
+	
+	movebase_client->sendGoal(goal);
+	
+	movebase_client->waitForResult();
+	if(movebase_client->getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
+		ROS_INFO("already reached goal!");
+		//TODO: 成功到达目的地，此处发挥想象做点啥
+	}
+	else{
+		ROS_INFO("Failed to reach the goal!");  
+	}  
+  return 0;
 }
