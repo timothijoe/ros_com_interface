@@ -13,8 +13,13 @@
 #include <actionlib/client/terminal_state.h>
 #include <actionlib_tutorials/FibonacciAction.h>
 
-typedef actionlib::SimpleActionServer<actionlib_tutorials::FibonacciAction> ActionServer;
+#include <styx_msgs/wp_updateAction.h>
+#include <styx_msgs/wp_updateGoal.h>
 
+//typedef actionlib::SimpleActionServer<actionlib_tutorials::FibonacciAction> ActionServer;
+//typedef actionlib::ActionClient <actionlib_tutorials::FibonacciAction> ActionClient;
+typedef actionlib::SimpleActionClient <styx_msgs::wp_updateAction> ActionClient_track;
+//typedef actionlib::ActionClient <styx_msgs::wp_updateGoal> ActionClient_ugoal;
 class ComInterface: public QThread{
   Q_OBJECT
 public:
@@ -30,6 +35,16 @@ public:
   bool callContinueService();
   bool setRobotStop();
   bool setRobotContinue();
+
+//  void done_callback(const actionlib::SimpleClientGoalState &state,
+//                     const styx_msgs::wp_updateResultConstPtr &result,
+//                     const actionlib::SimpleActionClient<styx_msgs::wp_updateAction> *client);
+
+  void done_callback(const actionlib::SimpleClientGoalState &state,
+                                   const styx_msgs::wp_updateResultConstPtr &result);
+  void active_callback();
+  void feedback_callback( const styx_msgs::wp_updateActionFeedbackConstPtr &feedback);
+
 
   bool callStartRecord(bool label);
   bool callEndRecord(bool label);
@@ -54,6 +69,10 @@ private:
   ros::Subscriber eva_sub;
   ros::ServiceClient start_record_client;
   ros::ServiceClient end_record_client;
+  ActionClient_track* action_client_track;
+  ActionClient_track* action_client_stop;
+  uint8_t track_current_idx;
+
 //  actionlib::SimpleActionClient<actionlib_tutorials::FibonacciAction> ac;
   // ActionServer aserver;
 

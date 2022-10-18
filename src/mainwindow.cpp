@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    manual_window = new Manual_Window();
     //ROS
     ros_f = new _Ros();
+    c_inter = new ComInterface();
 }
 MainWindow::~MainWindow()
 {
@@ -64,6 +65,8 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_start_track_btn_clicked()
 {
   std::cout<< "start button clicked" << std::endl;
+  int num = 0;
+  c_inter->callTrackAction(num);
 
 }
 
