@@ -112,3 +112,8 @@ void MainWindow::on_state_space_box_valueChanged(const QString &arg1)
     state_traj_num = ui->state_space_box->value();
     ui->state_space_lcd->display(state_traj_num);
 }
+
+void MainWindow::on_cancelMovebase_clicked()
+{
+    c_inter->cancelMoveBase();
+}

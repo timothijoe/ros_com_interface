@@ -21,6 +21,12 @@
 typedef actionlib::SimpleActionClient <styx_msgs::wp_updateAction> ActionClient_track;
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient; 
 //typedef actionlib::ActionClient <styx_msgs::wp_updateGoal> ActionClient_ugoal;
+
+
+
+static void done_callbackk(const actionlib::SimpleClientGoalState &state,
+                                 const styx_msgs::wp_updateResultConstPtr &result);
+static void active_callbackk();
 class ComInterface: public QThread{
   Q_OBJECT
 public:
@@ -53,6 +59,9 @@ public:
   bool cancelTrackAction();
   bool moveToOrigion1();
   bool moveToOrigion2();
+  bool cancelMoveBase();
+  bool stop_track_label;
+  ActionClient_track* action_client_track;
 
 Q_SIGNALS:
   void figureUpdated(double data1, double data2);
@@ -74,14 +83,16 @@ private:
   ros::Subscriber eva_sub;
   ros::ServiceClient start_record_client;
   ros::ServiceClient end_record_client;
-  ActionClient_track* action_client_track;
+
   MoveBaseClient* movebase_client;
   ActionClient_track* action_client_stop;
   uint8_t track_current_idx;
+
+
 
 //  actionlib::SimpleActionClient<actionlib_tutorials::FibonacciAction> ac;
   // ActionServer aserver;
 
 };
-
+static void feedback_callbackk( const styx_msgs::wp_updateFeedbackConstPtr &feedback,  const ComInterface *this_classs);
 #endif // COMINTERFACE_H

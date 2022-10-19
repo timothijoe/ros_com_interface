@@ -105,7 +105,7 @@
       <x>340</x>
       <y>300</y>
       <width>160</width>
-      <height>80</height>
+      <height>89</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -120,6 +120,13 @@
       <widget class="QPushButton" name="move_to2_btn">
        <property name="text">
         <string>Move to Origion2</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelMovebase">
+       <property name="text">
+        <string>Cancel Movebase</string>
        </property>
       </widget>
      </item>

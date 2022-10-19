@@ -49,6 +49,8 @@ private slots:
 
     void on_state_space_box_valueChanged(const QString &arg1);
 
+    void on_cancelMovebase_clicked();
+
 private:
     Ui::MainWindow *ui;
     ComInterface *c_inter;

@@ -8,6 +8,31 @@
 #include <std_srvs/Empty.h>
 #include <unistd.h>
 
+
+static void feedback_callbackk( const styx_msgs::wp_updateFeedbackConstPtr &feedback, const ComInterface *this_class)
+{
+  std::cout << "feedback function" << std::endl;
+
+  if (this_class->stop_track_label == true){
+    std::cout << "cancel goal" << std::endl;
+    this_class->action_client_track->cancelGoal();
+  }
+//    track_current_idx = feedback->status;
+    return;
+}
+
+static void done_callbackk(const actionlib::SimpleClientGoalState &state,
+                                 const styx_msgs::wp_updateResultConstPtr &result)
+{
+    return;
+}
+
+static void active_callbackk()
+{
+    return;
+}
+
+
 ComInterface::ComInterface()
 {
       action_client_track = new ActionClient_track(n, "/wp_update");
@@ -117,6 +142,7 @@ bool ComInterface::callStartRecord(bool label)
 bool ComInterface::callEndRecord(bool label)
 {
   ROS_INFO("Call End Record");
+
   // std_srvs::SetBool srv;
   // srv.request.data = label;
   // end_record_client.call(srv);
@@ -126,6 +152,7 @@ bool ComInterface::callEndRecord(bool label)
 bool ComInterface::callTrackAction(int traj_idx)
 {
   ROS_INFO("Call Track Action");
+  stop_track_label = false;
   styx_msgs::wp_updateGoal goal;
   if(traj_idx >= 14){
       traj_idx = 14;
@@ -134,20 +161,26 @@ bool ComInterface::callTrackAction(int traj_idx)
       traj_idx = 0;
   }
   goal.idx = traj_idx;
-  std::cout << " wait for server" << std::endl;
-  bool server_exists = action_client_track->waitForServer(ros::Duration(3.0));
+//  std::cout << " wait for server" << std::endl;
+//  bool server_exists = action_client_track->waitForServer(ros::Duration(3.0));
 // std::cout << server_exists << std::endl;
 //      if (!server_exists) {
 //          ROS_WARN("could not connect to server; halting");
 //          return 0; // 输出一个警报消息，这部分也是非必要的
 //      }
-std::cout << " wait for sendgoal" << std::endl;
-  while(true){
-      action_client_track->sendGoal(goal);
+//std::cout << " wait for sendgoal" << std::endl;
+
+//      action_client_track->sendGoal(goal);
 //      bool finished_before_timeout = action_client_track->waitForResult(ros::Duration(5.0));
-      break;
-  }
-std::cout << " end sendgoal" << std::endl;
+
+    action_client_track->sendGoal(goal, done_callbackk,
+                                  active_callbackk,
+                                  boost::bind(feedback_callbackk, _1, this));
+    action_client_stop->sendGoal(goal);
+//    bool finished_before_timeout = action_client_track->waitForResult();
+//    action_client_track->cancelGoal();
+
+
 //  action_client_track->sendGoal(goal);
 
 
@@ -157,14 +190,22 @@ std::cout << " end sendgoal" << std::endl;
 //                                boost::bind(&ComInterface::active_callback),
 //                                boost::bind(&ComInterface::feedback_callback, _1));
 
+
+//  action_client_track->sendGoal(goal, done_callbackk,
+//                                active_callbackk,
+//                                boost::bind(feedback_callbackk, _1, this));
+//                                feedback_callbackk);
+
 }
 
 
 bool ComInterface::cancelTrackAction()
 {
   ROS_INFO("Cancel Track Action");
+//   stop_track_label = true;
+//   action_client_track->cancelGoal();
   //bool server_exists = action_client_track->waitForServer(ros::Duration(3.0));
-  // action_client_track->cancelGoal();
+//  action_client_track->cancelGoal();
   styx_msgs::wp_updateGoal goal;
   goal.idx = 15;
   action_client_stop->sendGoal(goal);
@@ -175,11 +216,11 @@ bool ComInterface::cancelTrackAction()
 bool ComInterface::moveToOrigion1()
 {
   ROS_INFO("Move to Origin 1");
-  return true;
+
 
 	geometry_msgs::PoseStamped send_Pose;
 	move_base_msgs::MoveBaseGoal goal;
-	
+  send_Pose.header.frame_id = "map";
 	send_Pose.pose.position.x = -0.0029694437980651855;
 	send_Pose.pose.position.y =  2.828028678894043;
 	send_Pose.pose.position.z = 0;
@@ -192,7 +233,7 @@ bool ComInterface::moveToOrigion1()
 	
 	movebase_client->sendGoal(goal);
 	
-	movebase_client->waitForResult();
+//	movebase_client->waitForResult(ros::Duration(3.0));
 	if(movebase_client->getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
 		ROS_INFO("already reached goal!");
 		//TODO: 成功到达目的地，此处发挥想象做点啥
@@ -205,10 +246,11 @@ bool ComInterface::moveToOrigion1()
 
 bool ComInterface::moveToOrigion2()
 {
-  ROS_INFO("Move to Origin 1");
-  return true;
+  ROS_INFO("Move to Origin 2");
+
 
 	geometry_msgs::PoseStamped send_Pose;
+  send_Pose.header.frame_id = "map";
 	move_base_msgs::MoveBaseGoal goal;
 	
 	send_Pose.pose.position.x = 0.235748291015625;
@@ -223,7 +265,7 @@ bool ComInterface::moveToOrigion2()
 	
 	movebase_client->sendGoal(goal);
 	
-	movebase_client->waitForResult();
+//	movebase_client->waitForResult(ros::Duration(3.0));
 	if(movebase_client->getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
 		ROS_INFO("already reached goal!");
 		//TODO: 成功到达目的地，此处发挥想象做点啥
@@ -233,3 +275,13 @@ bool ComInterface::moveToOrigion2()
 	}  
   return 0;
 }
+
+
+bool ComInterface::cancelMoveBase()
+{
+  ROS_INFO("Cancel Move Base");
+  movebase_client->cancelGoal();
+  return 0;
+}
+
+
